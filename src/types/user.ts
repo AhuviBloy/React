@@ -1,28 +1,26 @@
 export type User = {
-    firstName: string;
-    lastName: string;
+    Name: string;
+    // lastName: string;
     email: string;
     password: string;
     address:string;
     phone:string;
 };
 
+export const initialUserState: User = {
+  Name: "",
+  // lastName: "",
+  email: "",
+  password: "",
+  address: "",
+  phone: "",
+};
 
 //helpers for useReducer of user....
 export type Action ={
     type: 'CREATE'|'UPDATE'|'GET'|'REMOVE',
     data: Partial<User>
-}
-
-export const initialUserState: User = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    address: "",
-    phone: "",
-  };
-
+};
 
   export const userReducer = (state: User, action: Action): User|any => {
     switch (action.type) {

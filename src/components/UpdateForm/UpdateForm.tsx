@@ -2,10 +2,11 @@
 
 import React, { useContext, useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { UserContext } from "../types/UserContext";
+import { UserContext } from "../../context/UserContext";
 
 
 const UpdateForm = ({ setOpen }: { setOpen: () => void }) => {
+  
   const { user, userDispatch } = useContext(UserContext)!;
   const [formData, setFormData] = useState({ ...user });
 
@@ -34,24 +35,24 @@ const UpdateForm = ({ setOpen }: { setOpen: () => void }) => {
             }}
           >
             <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
-              Update
+              User Details
             </Typography>
             <TextField
               fullWidth
-              label="First Name"
+              label="Name"
               name="firstName"
-              value={formData.firstName}
+              value={formData.Name}
               onChange={handleInputChange}
               sx={{ mb: 2 }}
             />
-            <TextField
+            {/* <TextField
               fullWidth
               label="Last Name"
               name="lastName"
               value={formData.lastName}
               onChange={handleInputChange}
               sx={{ mb: 2 }}
-            />
+            /> */}
             <TextField
               fullWidth
               label="Email"
