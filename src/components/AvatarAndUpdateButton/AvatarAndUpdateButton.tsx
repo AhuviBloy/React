@@ -7,7 +7,7 @@ import UpdateForm from "../UpdateForm/UpdateForm";
 import { UserContext } from "../../context/UserContext";
 
 const AvatarAndUpdateButton = () => {
-  const { user ,userDispatch } = useContext(UserContext)!;
+  const { user } = useContext(UserContext)!;
   const [open, setOpen] = useState(false);
 
   return (
@@ -22,17 +22,17 @@ const AvatarAndUpdateButton = () => {
           fontWeight: "bold",  
         }}
       >
-        {user.firstName.charAt(0).toUpperCase()}
+        {user.name.charAt(0).toUpperCase()}
       </MUIAvatar>
 
       {/* שם המשתמש */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
         <Typography variant="h6" sx={{ fontWeight: "600", color: "text.primary" }}>
-         Hi {user.firstName} {user.lastName}
+         Hi {user.name}
         </Typography>
       </Box>
-
-      {/* כפתור Update עם אייקון */}
+       <UpdateForm></UpdateForm>
+      {/* כפתור Update עם אייקון
       <Button
         variant="contained"
         color="primary"
@@ -50,9 +50,9 @@ const AvatarAndUpdateButton = () => {
       >
         <EditIcon />
         Update Details
-      </Button>
+      </Button> */}
 
-      {/* מודאל עבור עדכון פרטי המשתמש */}
+      {/* מודאל עבור עדכון פרטי המשתמש
       <Modal open={open} onClose={() => setOpen(false)} aria-labelledby="update-form-modal">
         <Box
           sx={{
@@ -69,7 +69,7 @@ const AvatarAndUpdateButton = () => {
         >
           <UpdateForm setOpen={() => setOpen(false)} />
         </Box>
-      </Modal>
+      </Modal> */}
     </Box>
   );
 };

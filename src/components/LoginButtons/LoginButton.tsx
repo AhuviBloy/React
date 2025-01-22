@@ -1,64 +1,52 @@
-
-
-import React, { useState } from "react";
-import { Button, Modal, Box, TextField, Typography } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useRef, useState } from "react";
 import { UserContext } from "../../context/UserContext";
-// import axios, { AxiosError } from "axios"
+import { Modal, Box, Typography, TextField, Button } from "@mui/material";
+import axios from "axios";
+import { CloseOutlined } from "@mui/icons-material";
 
-const AuthButtons = () => {
-  const [isLogin, setIsLogin] = useState(true); // מצב האם אנחנו בהתחברות או הרשמה
-  const { user,userDispatch } = useContext(UserContext)!;
-  const [formData, setFormData] = useState({ ...user });
-  const [open, setOpen] = useState(false);
+const LoginButton = ({ setIsLogin }: { setIsLogin: Function }) => {
+  const context = useContext(UserContext)!;
+  const [clicked, setClicked] = useState(false);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState("");
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const handleSubmit = async () => {
-    if (isLogin) {
-      // התחברות
-      try {
-        const response = await axios.post(
-          "http://localhost:5000/login",
-          formData
-        );
-        userDispatch({
+    try {
+      const res = await axios.post("http://localhost:3000/api/user/login", {
+        name: nameRef.current?.value,
+        password: passwordRef.current?.value,
+      });
+
+      console.log(res);
+      //   setUser(res.data.user)
+      setIsLogin(true);
+
+      if (context) {
+        setClicked(false);
+        context.userDispatch({
           type: "CREATE",
           data: {
-            firstName: response.data.user.firstName,
-            email: response.data.user.email,
+            id:res.data.user.id,
+            name: nameRef.current?.value || "",
+            password: passwordRef.current?.value || "",
           },
         });
-        setOpen(false);
-      } catch (error) {
-        setError("התחברות נכשלה, ודא שהשם והסיסמא נכונים");
       }
-    } else {
-      // הרשמה
-      try {
-        const response = await axios.post(
-          "http://localhost:5000/register",
-          formData
-        );
-        alert("הרשמה הצליחה! עכשיו תוכל להתחבר");
-        setIsLogin(true); // עבור למצב התחברות
-      } catch (error) {
-        setError("הרשמה נכשלה, ייתכן שהמשתמש קיים כבר");
-      }
+    } catch (e) {
+      setError("התחברות נכשלה, ודא שהשם והסיסמא נכונים");
     }
   };
 
   return (
     <>
-      <Button variant="contained" onClick={() => setOpen(true)}>
-        התחבר
-      </Button>
+      <Button variant="contained" onClick={() => setClicked(true)}
+        sx={{ marginRight: '10px' }}
+        >Login</Button>
 
-      <Modal open={open} onClose={() => setOpen(false)}>
+      <Modal open={clicked} onClose={() => setClicked(false)}>
         <Box
           sx={{
             position: "absolute",
@@ -72,84 +60,43 @@ const AuthButtons = () => {
             p: 4,
           }}
         >
-          <Typography variant="h6" component="h2">
-            {isLogin ? "התחבר" : "הרשם"}
-          </Typography>
-          
-          {!isLogin && <div>
-          <TextField
-              fullWidth
-              label="Name"
-              name="firstName"
-              value={formData.Name}
-              onChange={handleInputChange}
-              sx={{ mb: 2 }}
-            />
-            {/* <TextField
-              fullWidth
-              label="Last Name"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              sx={{ mb: 2 }}
-            /> */}
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              fullWidth
-              label="Password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              sx={{ mb: 2 }}
-            />
-          </div>}
+           <Button onClick={() => setClicked(false)}
+            sx={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              background: 'transparent',
+              border: 'none',
+              fontSize: '20px',
+              cursor: 'pointer',
+            }}>
+             <CloseOutlined /></Button>
 
-          {isLogin && <div>
-          <TextField
-              fullWidth
-              label="Name"
-              name="name"
-              type="text"
-              value={formData.Name}
-              onChange={handleInputChange}
-              sx={{ mb: 2 }}
-            />
-            {/* <TextField
-              fullWidth
-              label="Last Name"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              sx={{ mb: 2 }}
-            /> */}
-            <TextField
-              fullWidth
-              label="Password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              sx={{ mb: 2 }}
-            />
-          </div>}
-           
+          <Typography variant="h6" component="h2"> Login </Typography>
 
-          <Button variant="contained" onClick={handleSubmit}>
-            {isLogin ? "התחבר" : "הרשם"}
-          </Button>
+          <TextField
+            fullWidth
+            label="Name"
+            name="name"
+            inputRef={nameRef}
+            sx={{ mb: 2 }}
+          />
+
+          <TextField
+            fullWidth
+            label="Password"
+            name="password"
+            type="password"
+            inputRef={passwordRef}
+            sx={{ mb: 2 }}
+          />
+
+          <Button variant="contained" onClick={handleSubmit}> save</Button>
 
           <Typography sx={{ mt: 2, color: "red" }}>{error}</Typography>
 
-          <Button onClick={() => setIsLogin(!isLogin)} sx={{ mt: 2 }}>
-            {isLogin ? "אין לך חשבון? הרשם עכשיו" : "יש לך חשבון? התחבר"}
+          <Button onClick={() => setClicked(false)} sx={{ mt: 2 }}>
+            אין לך חשבון? הרשם עכשיו
           </Button>
         </Box>
       </Modal>
@@ -157,4 +104,4 @@ const AuthButtons = () => {
   );
 };
 
-export default AuthButtons;
+export default LoginButton;

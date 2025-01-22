@@ -1,6 +1,6 @@
 export type User = {
-    Name: string;
-    // lastName: string;
+    id:number|null
+    name: string;
     email: string;
     password: string;
     address:string;
@@ -8,8 +8,8 @@ export type User = {
 };
 
 export const initialUserState: User = {
-  Name: "",
-  // lastName: "",
+  id:0,
+  name: "",
   email: "",
   password: "",
   address: "",
@@ -22,13 +22,37 @@ export type Action ={
     data: Partial<User>
 };
 
-  export const userReducer = (state: User, action: Action): User|any => {
+  export const userReducer = (state: User, action: Action): User => {
     switch (action.type) {
-      case "CREATE":
-        return { ...action.data };
+      case "CREATE":{
+        const {id,name,password,email}= action.data as Partial<User>;
+        return {
+          id:id ||0,
+          name: name||'',
+          password: password || '',
+          email:email||'',
+          address:'',
+          phone:''
+      }
+      }
+        
       case "UPDATE":
-        return { ...state, ...action.data };
-      default:
-        return state;
+        console.log(action.data);
+        
+        if (!action.data) {
+          return state; 
+        }
+          
+        return {
+          // ...state,
+          id: state.id,
+          name: action.data.name || state.name,
+          password :state.password,
+          email: action.data.email || state.email,
+          address: action.data.address || state.address,
+          phone: action.data.phone || state.phone,
     }
+    default:
+      return state;
   }
+}
