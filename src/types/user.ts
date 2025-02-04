@@ -1,5 +1,5 @@
 export type User = {
-    id:number|null
+    id:number|null,
     name: string;
     email: string;
     password: string;
@@ -16,7 +16,6 @@ export const initialUserState: User = {
   phone: "",
 };
 
-//helpers for useReducer of user....
 export type Action ={
     type: 'CREATE'|'UPDATE'|'GET'|'REMOVE',
     data: Partial<User>
@@ -44,7 +43,6 @@ export type Action ={
         }
           
         return {
-          // ...state,
           id: state.id,
           name: action.data.name || state.name,
           password :state.password,

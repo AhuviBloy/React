@@ -1,0 +1,6 @@
+bundle
+--output
+bundle.txt
+--language
+react
+--remove-empty-lines
