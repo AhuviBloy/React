@@ -39,16 +39,15 @@ const NavBar = () => {
           right: 10,
           zIndex: 1001,
           '&:hover': {
-            backgroundColor: theme.palette.primary.light,  // שינוי צבע רקע בעת מעבר עכבר
-            borderRadius: '50%',  // עיגול הרקע של האייקון
-            transition: 'background-color 0.3s ease', // אפקט מעבר חלק
+            backgroundColor: theme.palette.primary.light, 
+            borderRadius: '50%',  
+            transition: 'background-color 0.3s ease', 
           },
         }}
       >
         <MenuIcon sx={{ color: "black", fontSize: "35px" }} />
       </IconButton>
 
-      {/* Drawer (תפריט צדדי) */}
       <Drawer anchor="right" open={open} onClose={() => toggleDrawer(false)}>
         <Box
           sx={{
@@ -58,8 +57,8 @@ const NavBar = () => {
             padding: 2,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center", // למרכז את הכפתורים
-            alignItems: "center", // למרכז את הכפתורים
+            justifyContent: "center", 
+            alignItems: "center", 
           }}
           
         >
@@ -78,10 +77,10 @@ const NavBar = () => {
                   transition: "0.3s",
                   borderRadius: "8px",
                   marginBottom: "10px",
-                  width: "100%", // לוודא שהכפתור תופס את כל הרוחב
-                  justifyContent: "center", // למרכז את הטקסט והאייקון
+                  width: "100%", 
+                  justifyContent: "center",
                 }}
-                onClick={() => toggleDrawer(false)} // סגירת ה-Drawer לאחר לחיצה על לינק
+                onClick={() => toggleDrawer(false)} 
               >
                 <Box
                   sx={{

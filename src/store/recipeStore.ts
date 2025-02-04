@@ -12,7 +12,7 @@ export type RecipeType = {
 
 class recipeStore {
   list: RecipeType[] = [];
-  error: string = ''; // סטור של השגיאה
+  error: string = ''; 
   openSnackbar: boolean = false;
 
   constructor() {
