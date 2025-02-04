@@ -1,10 +1,10 @@
 import { Container } from '@mui/material';
-import NavBar from './NavBar';
 import { Outlet } from 'react-router-dom';
 import HomePage from '../HomePage/HomePage';
 import { useReducer } from 'react';
 import { initialUserState, userReducer } from '../../types/user';
 import { UserContext } from '../../context/UserContext';
+import NavBar from './NavBar';
 
 function AppLayout() {
 

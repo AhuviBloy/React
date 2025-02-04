@@ -93,6 +93,7 @@ if (!userCon) throw new Error("ERROR Profile must be used within a UserContext.P
                         variant="outlined"
                         margin="normal"
                         size="small"
+                        multiline
                         {...register('description')}
                         error={!!errors.description}
                         helperText={errors.description?.message}
@@ -151,6 +152,7 @@ if (!userCon) throw new Error("ERROR Profile must be used within a UserContext.P
                         variant="outlined"
                         margin="normal"
                         size="small"
+                        multiline
                         {...register('instructions')}
                         error={!!errors.instructions}
                         helperText={errors.instructions?.message}

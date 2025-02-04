@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { makeAutoObservable, action } from "mobx";
 
 export type RecipeType = {
@@ -12,6 +12,8 @@ export type RecipeType = {
 
 class recipeStore {
   list: RecipeType[] = [];
+  error: string = ''; // סטור של השגיאה
+  openSnackbar: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -31,6 +33,10 @@ class recipeStore {
     return this.list;
   }
 
+  GetRecipeById(id: number): RecipeType | undefined {
+    return this.list.find((t) => t.id === id);
+  };
+
   addRecipe = action(async (newRecipe: Partial<RecipeType>) => {
     try {
       await axios.post("http://localhost:3000/api/recipes", newRecipe, {
@@ -39,13 +45,18 @@ class recipeStore {
         },
       });
       this.fetchRecipes();
-    } catch (e) {
-      console.error("Error adding recipe:", e);
+    }catch (e) {
+      
+      const error = e as AxiosError;
+      this.handleError(error);
     }
   });
 
+
   updateRecipe = action(async (newRecipe: Partial<RecipeType>) => {
     try {
+      console.log(newRecipe.id);
+      
       await axios.put("http://localhost:3000/api/recipes", newRecipe, {
         headers: {
           'recipe-id': newRecipe.id,
@@ -53,14 +64,41 @@ class recipeStore {
       });
       this.fetchRecipes();
      
-    } catch (e) {
-      console.error("Error not found recipe:", e);
+    } catch (e: any) {
+      const error = e as AxiosError;
+      this.handleError(error);
     }
   });
 
-  GetRecipeById(id: number): RecipeType | undefined {
-    return this.list.find((t) => t.id === id);
+
+
+
+
+  handleError(error: AxiosError) {
+    if (error.response) {
+      const status = error.response.status;
+      if (status === 401) {
+        this.setError("המייל או הסיסמה לא תקינים.");
+      } else if (status === 403) {
+        this.setError("יש להתחבר כדי להכניס או לעדכן מתכון.");
+      } else if (status === 404) {
+        this.setError("המתכון לא נמצא.");
+      } else {
+        this.setError("בעיה בשרת.");
+      }
+    } else {
+      this.setError("בעיה בקישור לרשת.");
+    }
   }
-}
+
+  setError(message: string) {
+    this.error = message;
+    this.openSnackbar = true;
+  }
+
+  handleCloseSnackbar = () => {
+    this.openSnackbar = false;
+  };
+ }
 
 export default new recipeStore();

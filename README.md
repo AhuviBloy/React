@@ -15,7 +15,7 @@ export default (req, res, next) => {
 
     const recipe = db.recipes.find(recipe => recipe.id == recipeId);
     if (!recipe) {
-        return res.status(403).json({ message: "Unauthorized" });
+        return res.status(404 ).json({ message: "Recipe not found" });
     }
 
     req.recipe = recipe;
@@ -24,7 +24,7 @@ export default (req, res, next) => {
 ```
 3.
 ```js
-router.put('/', authMiddleware, (req, res) => {
+router.put('/', recipeMiddleware, (req, res) => {
     const { title ,description, authorId,ingredients, instructions } = req.body;
     const id = (req.header('recipe-id'));
 

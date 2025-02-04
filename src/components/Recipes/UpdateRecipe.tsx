@@ -1,11 +1,22 @@
 import { useState } from "react";
-import {Button,Dialog,DialogActions,DialogContent,DialogTitle,TextField,Typography,} from "@mui/material";
+import {
+  Alert,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import recipeStore, { RecipeType } from "../../store/recipeStore";
 import { observer } from "mobx-react-lite";
 
 const UpdateRecipe = observer(() => {
+
   const { id } = useParams();
   const [clicked, setClicked] = useState(false);
   const navigate = useNavigate();
@@ -18,6 +29,7 @@ const UpdateRecipe = observer(() => {
 
   const onSubmit = async (data: any) => {
     const newRecipe: Partial<RecipeType> = {
+      id: original?.id,
       title: data.title || original?.title,
       authorId: data.authorId || original?.authorId,
       description: data.description || original?.description,
@@ -29,20 +41,27 @@ const UpdateRecipe = observer(() => {
     recipeStore.updateRecipe(newRecipe);
     setClicked(false);
     navigate("/");
-    reset({
-      ingredients: []
-    });
+    reset({ ingredients: [] });
   };
   const handleModalOpen = () => {
     reset({ ingredients: [] });
     fields.forEach((_field, index) => remove(index));
   };
+
   return (
     <>
       <Button
-        onClick={() => { handleModalOpen(); setClicked(true);}}
+        onClick={() => {
+          handleModalOpen();
+          setClicked(true);
+        }}
         variant="contained"
-        sx={{color: "white",borderRadius: "8px",marginRight: "10px",padding: "6px 16px",}}
+        sx={{
+          color: "white",
+          borderRadius: "8px",
+          marginRight: "10px",
+          padding: "6px 16px",
+        }}
       >
         {`Update Recipe ${original?.title}`}
       </Button>
@@ -76,6 +95,7 @@ const UpdateRecipe = observer(() => {
               variant="outlined"
               margin="normal"
               size="small"
+              multiline
               defaultValue={original?.description}
             />
 
